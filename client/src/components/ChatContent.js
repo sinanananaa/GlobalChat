@@ -3,39 +3,36 @@ import { List } from 'antd';
 
 const data = [
   {"user": "user123", message: "cao", "id": "123"},
-  {"user": "user124", message: "cao i tebi", "id": "124"}
+  {"user": "user124", message: "cao i tebi", "id": "124"},
+  {"user": "user124", message: "cao i tebi1", "id": "125"},
+  {"user": "user124", message: "cao i tebi2", "id": "126"},
+  {"user": "user123", message: "cao i tebi3", "id": "127"},
+  {"user": "user124", message: "cao i tebi4", "id": "128"},
+  {"user": "user124", message: "cao i tebi4", "id": "129"},
+  {"user": "user124", message: "cao i tebi89", "id": "133"}
 ]
 const ChatContent = () => {  
   return (
     <>
-    <div
-      id="scrollableDiv"
-      style={{
-        height: 400,
-        overflow: 'auto',
-        padding: '0 16px',
-        border: '1px solid rgba(140, 140, 140, 0.35)',
-      }}
-    >
+   
     <List
       dataSource={data}
+      style={{height:'100%'}}
+      bordered = {true}
       renderItem={(item) => (
           item.user == "user123" ?
-          <List.Item key={item.id}>
-            <List.Item.Meta
-            title={item.user}
-            description={item.message}
-            /> 
+          <List.Item key={item.id} style={{border: 'none'}}>
+            <div className='mymessage'>
+              {item.message}
+            </div>
           </List.Item> : 
-          <List.Item key={item.id} style={{background:"lightblue"}}>
-            <List.Item.Meta
-              title={item.user}
-              description={item.message}
-            /> 
+          <List.Item key={item.id} style={{border: 'none'}}>
+            <div className='othermessage'>
+              <b>{item.user}:</b> {item.message}
+            </div>
           </List.Item>
       )}
     />
-    </div>
     </>
   );
 };
