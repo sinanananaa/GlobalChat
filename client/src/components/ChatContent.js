@@ -1,26 +1,50 @@
 import React from 'react';
 import { List } from 'antd';
+import { useState, useEffect, useRef } from 'react';
+import {socket} from '../socket';
 
-const data = [
-  {"user": "user123", message: "cao", "id": "123"},
-  {"user": "user124", message: "cao i tebi", "id": "124"},
-  {"user": "user124", message: "cao i tebi1", "id": "125"},
-  {"user": "user124", message: "cao i tebi2", "id": "126"},
-  {"user": "user123", message: "cao i tebi3", "id": "127"},
-  {"user": "user124", message: "cao i tebi4", "id": "128"},
-  {"user": "user124", message: "cao i tebi4", "id": "129"},
-  {"user": "user124", message: "cao i tebi89", "id": "133"}
-]
-const ChatContent = () => {  
+const ChatContent = (props) => {  
+
+  const [messages, setMessages] = useState([]);
+  let username = "";
+  
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages]);
+
+
+  socket.on('all_messages', (messages) => {
+    console.log('Client recieves all message', messages);
+    setMessages(messages);
+  });
+
+  socket.on('new_message', (message) => {
+    console.log('Client recieves new message', message);
+    setMessages([...messages, message]);
+  });
+
+  
+  socket.on("client_name", (name) => {
+    console.log("Client recieves it's name", name);
+    socket.name = name;
+    username = name;
+  });
+
   return (
     <>
-   
     <List
-      dataSource={data}
-      style={{height:'100%'}}
+      dataSource={messages}
+      style={{flex: 1, overflow: 'auto'}}
+      footer={<div ref={messagesEndRef}></div>}
       bordered = {true}
-      renderItem={(item) => (
-          item.user == "user123" ?
+      renderItem={(item, index) => (
+          item.user == socket.name ?
           <List.Item key={item.id} style={{border: 'none'}}>
             <div className='mymessage'>
               {item.message}
@@ -31,6 +55,7 @@ const ChatContent = () => {
               <b>{item.user}:</b> {item.message}
             </div>
           </List.Item>
+          
       )}
     />
     </>

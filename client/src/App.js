@@ -4,15 +4,17 @@ import ChatContent from './components/ChatContent';
 import ChatFooter from './components/ChatFooter';
 import ChatHeader from './components/ChatHeader';
 import './App.css';
-
 import { Col, Layout, Row } from 'antd';
+import { useState, useEffect } from 'react';
+import {socket} from './socket';
 
 const { Header, Footer, Sider, Content } = Layout;
 
-//import socketIO from 'socket.io-client';
-//const socket = socketIO.connect('http://localhost:8000');
 
 function App() {
+
+  
+  
   return (
     <>
 
@@ -24,8 +26,8 @@ function App() {
      <Sider breakpoint="sm" collapsedWidth="0" style={{background: "white"}}>
         <ChatSidebar />
       </Sider>
-      <Content className='maincontent'>
-        <ChatContent style={{flex: 1}} />
+      <Content className='mainpanel'>
+        <ChatContent className='chatcontent'/>
         <ChatFooter style={{height: "40px"}}/>
       </Content>
 
