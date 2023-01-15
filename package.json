@@ -1,0 +1,12 @@
+{
+  "name": "global-chat",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/sinanananaa/GlobalChat.git",
+  "author": "sinanananaa <sinanovica1@gmail.com>",
+  "license": "MIT"
+}
