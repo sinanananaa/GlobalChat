@@ -1,15 +1,14 @@
 import React from 'react';
 import { Button, Form, Input, Space} from 'antd';
 import { useContext } from 'react';
-import { ChatContext } from '../provider/ChatProvider';
-import { SocketContext } from '../socket';
+import { ChatContext } from '../contexts/ChatContext';
+import { SocketContext } from '../contexts/SocketContext';
 const {TextArea} = Input;
 
 const ChatFooter = () => {
 
+  const { username, currentChat, setCurrentChat, chats, setChats } = useContext(ChatContext);
   const socket = useContext(SocketContext);
-  const { username, currentChat, setCurrentChat, chats, setChats} = useContext(ChatContext);
-
   const [form] = Form.useForm();
 
   const onSendMessage = (values) => {

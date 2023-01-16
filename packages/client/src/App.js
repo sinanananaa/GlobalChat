@@ -1,17 +1,16 @@
 import React from 'react';
 import ChatPage from './pages/ChatPage';
 import './style/App.css';
-import { ChatProvider } from './provider/ChatProvider';
-import {SocketContext, socket} from './socket';
-
+import { ChatProvider } from './contexts/ChatContext';
+import { SocketProvider } from './contexts/SocketContext';
 function App() {
   return (
     <>
-    <SocketContext.Provider value={socket}>
-        <ChatProvider>
+      <ChatProvider>
+        <SocketProvider>
           <ChatPage />
-        </ChatProvider>
-    </SocketContext.Provider>
+        </SocketProvider>
+      </ChatProvider>
     </>
   );
 }

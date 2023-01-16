@@ -1,11 +1,11 @@
 import React from 'react';
 import { List } from 'antd';
 import { useContext } from 'react';
-import { ChatContext } from '../provider/ChatProvider';
+import { ChatContext } from '../contexts/ChatContext';
 
 const ChatSidebar = () => {
 
-  const { chats,  currentChat, setCurrentChat} = useContext(ChatContext);
+  const { username,chats, setChats, currentChat, setCurrentChat} = useContext(ChatContext);
 
   return (<List
     dataSource={chats}

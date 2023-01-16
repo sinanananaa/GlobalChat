@@ -10,6 +10,7 @@ export function ChatProvider({ children }) {
   const [chats, setChats] = useState([globalChat]);
   const [currentChat, setCurrentChat] = useState(globalChat);
   const [username, setUsername] = useState("");
+  const [init, setInit] = useState(false);
 
   let value = {
     chats,
@@ -17,7 +18,9 @@ export function ChatProvider({ children }) {
     currentChat,
     setCurrentChat,
     username,
-    setUsername
+    setUsername,
+    init,
+    setInit
   };
 
   return (
