@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Form, Input, Space} from 'antd';
-import {socket} from '../socket';
-import { useContext, useCallback} from 'react';
+import { useContext } from 'react';
 import { ChatContext } from '../provider/ChatProvider';
 import { SocketContext } from '../socket';
 const {TextArea} = Input;
@@ -9,30 +8,29 @@ const {TextArea} = Input;
 const ChatFooter = () => {
 
   const socket = useContext(SocketContext);
-
-  const { username, setUsername, currentChat, setCurrentChat, chats, setChats} = useContext(ChatContext);
+  const { username, currentChat, setCurrentChat, chats, setChats} = useContext(ChatContext);
 
   const [form] = Form.useForm();
 
   const onSendMessage = (values) => {
+    console.log(chats);
     console.log('Client sends new message', values.message);
     let message = {
       from: username,
       to: currentChat.name,
       message: values.message
     }
-    socket.emit("send_message", message)
-    socket.off();
     console.log('Client sends new message', message);
+    socket.emit("send_message", message)
     const updatedChats = [...chats];
+    console.log('updated chats', updatedChats);
     const currentChatIndex = chats.findIndex(chat => chat.name === currentChat.name);
     updatedChats[currentChatIndex].messages.push(message);
     setCurrentChat(updatedChats[currentChatIndex]);
     setChats(updatedChats);
-    //setUsername(username);
     form.resetFields();
   };
-
+  
   return (
 
     <Form 

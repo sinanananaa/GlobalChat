@@ -1,5 +1,4 @@
 import React, { createContext, useState } from 'react';
-
 export const ChatContext = createContext();
 
 export function ChatProvider({ children }) {
@@ -7,6 +6,7 @@ export function ChatProvider({ children }) {
     name: "Global",
     messages: []
   };
+
   const [chats, setChats] = useState([globalChat]);
   const [currentChat, setCurrentChat] = useState(globalChat);
   const [username, setUsername] = useState("");

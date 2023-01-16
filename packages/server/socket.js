@@ -1,14 +1,17 @@
 import ChatMessage from "./src/models/ChatMessage"
 const uuid = require('uuid-v4');
 
-
+let clients = [];
 module.exports = (io) => {
 
   io.on('connection', async client => {
+
+  
     
   // Generate and set clients name
   let s = "user" + client.id
   client.name = s;
+
   //client.id = client.name;
   console.log('New client connected ', s);
 
@@ -18,21 +21,16 @@ module.exports = (io) => {
 
   // Join to global room
   client.join("Global");
-
-   // Send messages to new user -> this will be done with react query
-   let messages = await ChatMessage.find();
-   client.emit("all_messages", messages);
   
   // Send already active users to new user
-  let sockets = await io.fetchSockets();
-  let clients = [];
-  sockets.forEach(element => {
-    if(element.id != client.id) clients.push(element.name);
-  });
+  // let sockets = await io.fetchSockets();
+  // let clients = [];
+  // sockets.forEach(element => {
+  //   if(element.id != client.id) clients.push(element.name);
+  // });
+
   client.emit("active_users", clients);
-
- 
-
+  clients.push(s)
 
   client.on('send_message', message => {
     console.log("Server recieves new message", message, " from client ", client.name);
@@ -51,6 +49,7 @@ module.exports = (io) => {
   client.on('disconnect', () => {
     console.log('Client disconnected ', client.name);
     // Send to users that some user is disconected
+    clients = clients.filter((item) => {return item!=client.name;});
     io.emit("remove_user", client.name);
   });
 });
