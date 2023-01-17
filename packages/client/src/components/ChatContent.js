@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import  { ToastContainer } from 'react-toastify';
 import { SocketContext } from '../contexts/SocketContext';
 
+const SERVER_URL = process.env.REACT_APP_SERVER_URL; //  || 'http://localhost:8000/api/';
+
 const ChatContent = () => {  
 
   const { username,chats, setChats, currentChat, setCurrentChat, init } = useContext(ChatContext);
@@ -83,7 +85,8 @@ const ChatContent = () => {
 
   useEffect(() => {
     async function fetchMessages(page) {
-      const res = await fetch(`http://localhost:8000/api/chats?page=${page}&limit=10`);
+      console.log(SERVER_URL);
+      const res = await fetch(`${SERVER_URL}chats?page=${page}&limit=10`);
       const data = await res.json()
       const updatedChats = [...chats];
       updatedChats[0].messages.unshift(...data);

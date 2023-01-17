@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "@globalchat/server",
   "version": "1.0.0",
   "description": "Backend GlobalChat",
   "main": "app.js",
@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.12",
     "@babel/node": "^7.20.7",
     "@babel/preset-env": "^7.20.2",
     "cors": "^2.8.5",

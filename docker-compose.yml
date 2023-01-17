@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  client:
+    build:
+      context:  ./packages/client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    command: ["yarn", "start"]
+
+  server:
+    build:
+      context: ./packages/server
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    command: ["yarn", "start"]
