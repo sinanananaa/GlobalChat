@@ -5,6 +5,7 @@ import { ChatContext } from '../contexts/ChatContext';
 import 'react-toastify/dist/ReactToastify.css';
 import  { ToastContainer, toast } from 'react-toastify';
 import { SocketContext } from '../contexts/SocketContext';
+import '../style/App.css';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -91,22 +92,17 @@ const ChatContent = () => {
     <List
       dataSource={currentChat.messages}
       style={{flex: 1, overflow: 'auto'}}
-      header={currentChat.name === "Global" ? <button onClick={() => onLoadMore()}>Load more</button> : <div></div>}
+      className="chat-container"
+      header={currentChat.name === "Global" ? <button type='dashed' style={{ width: '100%' }} className="load-more-btn" onClick={() => onLoadMore()}>Load more</button> : ""}
       footer={<div ref={messagesEndRef}></div>}
       bordered = {true}
       renderItem={(item) => (
-          item.from === username ?
-          <List.Item key={item._id} style={{border: 'none'}}>
-            <div className='mymessage'>
-              {item.message}
-            </div>
-          </List.Item> : 
-          <List.Item key={item._id} style={{border: 'none'}}>
-            <div className='othermessage'>
-              <b>{item.from}:</b> {item.message}
-            </div>
-          </List.Item>
-          
+        <List.Item key={item._id} style={{border: 'none'}}>
+          <div className={item.from === username ? 'mymessage' : 'othermessage'}>
+            {item.from !== username && <div className='username'>{item.from}:</div>}
+            <div className='message-text'>{item.message}</div>
+          </div>
+        </List.Item> 
       )}
     />
     </>
