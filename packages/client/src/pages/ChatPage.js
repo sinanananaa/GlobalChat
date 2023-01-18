@@ -8,29 +8,20 @@ import { ChatContext } from '../contexts/ChatContext';
 import { SocketContext} from '../contexts/SocketContext';
 const { Header,Sider, Content } = Layout;
 
-let count = 0;
-
 const ChatPage = () => {
 
-  const { username, setUsername, currentChat, setCurrentChat, chats, setChats, init, setInit } = useContext(ChatContext);
+  const { setUsername, setChats, setInit } = useContext(ChatContext);
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    //// GETNAME
-
-    console.log("I am executing", count);
-    count++;
 
     socket.once("client_name", (name) => {
       console.log("Client recieves it's name", name);
       setUsername(name);
     });
 
-    /// GET ALL MESSAGES
     socket.once('active_users', (active_users) => {
-      console.log('Client recieves list of active users before him', active_users);
-      console.log(chats);
-      setChats(chats => [...chats, ...active_users.map((user) => { return {name: user, messages: []};})]);   
+      setChats(chats => [...chats, ...active_users.map((user) => { return {name: user, messages: [], newMessages: 0};})]);   
       setInit(true);
     });
 

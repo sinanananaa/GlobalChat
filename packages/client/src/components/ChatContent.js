@@ -3,10 +3,10 @@ import { List } from 'antd';
 import { useEffect, useRef, useContext, useState } from 'react';
 import { ChatContext } from '../contexts/ChatContext';
 import 'react-toastify/dist/ReactToastify.css';
-import  { ToastContainer } from 'react-toastify';
+import  { ToastContainer, toast } from 'react-toastify';
 import { SocketContext } from '../contexts/SocketContext';
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL; //  || 'http://localhost:8000/api/';
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const ChatContent = () => {  
 
@@ -18,61 +18,49 @@ const ChatContent = () => {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }   
+  }
+
   const onLoadMore = () => {
     if(currentChat.name === "Global") setPage(page => page + 1);
   }
 
   useEffect(() => {
 
-      console.log("Executing second useEffect");
-          /// NEW USER
+    scrollToBottom();
+   
     socket.on('new_user', (user) => {
-      console.log('New user joined', user);
-      //toast('New user joined ' + user, { toastId:'amina'});
-      const updatedChats = [...chats];
-      updatedChats.push({name: user, messages: []});
-      setChats(updatedChats);
+      toast('New user joined.', { toastId:'newUser'});
+      setChats(chats => [...chats, {name: user, messages: [], newMessages: 0}]);
     });
 
-    /// REMOVE USER
     socket.on('remove_user', (remove_user) => {
-        console.log('User left the chat', remove_user);
-        let newChats = chats.filter(function( chat ) {
-            return chat.name !== remove_user;
-        });
-        setChats(newChats);
+        setChats(chats => chats.filter(chat => chat.name !== remove_user));
     });
 
-    /// RECIEVE MESSAGE
-    socket.on('recieve_message', (message) => {
-      console.log('Client recieves new message', message);
-      
+    socket.on('recieve_message', (message) => {      
       if(message.to === "Global") {
         const updatedChats = [...chats];
         updatedChats[0].messages.push(message);
         if(currentChat.name === "Global") {
-          console.log("curr", currentChat.name);
           setCurrentChat(updatedChats[0]);
-          scrollToBottom();
+        } else {
+          updatedChats[0].newMessages++;
+          toast("You have new message", { toastId: 'newMessage'});
+          //notifyMe(message);
         }
         setChats(updatedChats);
-        //toast("There is new message in global chat");
-        //notifyMe(message);
       } else {
         const updatedChats = [...chats];
-        console.log(chats);
         const updatedChatIndex = chats.findIndex(chat => chat.name === message.from); 
         updatedChats[updatedChatIndex].messages.push(message);
         if(currentChat.name === message.from) {
-          console.log("curr", currentChat);
-          console.log("from", message.from);
           setCurrentChat(updatedChats[updatedChatIndex]);
-          scrollToBottom();
+        } else {
+          updatedChats[updatedChatIndex].newMessages++;
+          toast("You have new message", { toastId: 'newMessage'});
+          //notifyMe(message);
         }
         setChats(updatedChats);
-        //toast("There is new message from " + message.from);
-        //notifyMe(message);
       }
     });
 
@@ -85,8 +73,7 @@ const ChatContent = () => {
 
   useEffect(() => {
     async function fetchMessages(page) {
-      console.log(SERVER_URL);
-      const res = await fetch(`${SERVER_URL}chats?page=${page}&limit=10`);
+      const res = await fetch(`${SERVER_URL}/api/chats?page=${page}&limit=10`);
       const data = await res.json()
       const updatedChats = [...chats];
       updatedChats[0].messages.unshift(...data);

@@ -4,7 +4,8 @@ export const ChatContext = createContext();
 export function ChatProvider({ children }) {
   const globalChat = {
     name: "Global",
-    messages: []
+    messages: [],
+    newMessages: 0
   };
 
   const [chats, setChats] = useState([globalChat]);

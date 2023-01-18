@@ -1,5 +1,6 @@
-version: '3.8'
+version: '3'
 services:
+
   client:
     build:
       context:  ./packages/client
@@ -14,4 +15,21 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    networks:
+      - globalchatnetwork
+    depends_on:
+      - database
     command: ["yarn", "start"]
+
+  database:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./packages/server/globalchatDB:/data/db
+    networks:
+      - globalchatnetwork
+
+networks:
+  globalchatnetwork:
+    driver: bridge

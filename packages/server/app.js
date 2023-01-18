@@ -4,19 +4,24 @@ import cors from 'cors';
 import api from './src/api';
 import mongoose from 'mongoose';
 
-mongoose.connect(DB_CONNECT_STRING);
+mongoose.connect(DB_CONNECT_STRING, {
+    useNewUrlParser: true
+  }).catch((error) => console.log(error));
 
 const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: REACT_APP_URL,
+    origin: '*',
 }));
-
 
 api(app);
 
-const server = require('http').Server(app);
+//const server = require('http').Server(app);
+
+const server = app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}`)
+})
 
 const io = require('socket.io')(server, {
   cors: {
@@ -25,7 +30,3 @@ const io = require('socket.io')(server, {
 });
 const socket = require("./socket.js");
 socket(io);
-
-server.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`)
-})

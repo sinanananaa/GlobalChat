@@ -12,17 +12,13 @@ const ChatFooter = () => {
   const [form] = Form.useForm();
 
   const onSendMessage = (values) => {
-    console.log(chats);
-    console.log('Client sends new message', values.message);
     let message = {
       from: username,
       to: currentChat.name,
       message: values.message
     }
-    console.log('Client sends new message', message);
     socket.emit("send_message", message)
     const updatedChats = [...chats];
-    console.log('updated chats', updatedChats);
     const currentChatIndex = chats.findIndex(chat => chat.name === currentChat.name);
     updatedChats[currentChatIndex].messages.push(message);
     setCurrentChat(updatedChats[currentChatIndex]);
